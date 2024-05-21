@@ -23,7 +23,10 @@ export default function Sidebar({
         className
       )}
     >
-        <Nav isCollapsed={isCollapsed} links={sidelinks} />
+      <h1 className={cn("p-4 text-xl font-bold mb-2")}>
+        {isCollapsed ? "M" : "MicroInvoice"}
+      </h1>
+      <Nav isCollapsed={isCollapsed} links={sidelinks} />
       <Button
         onClick={() => setIsCollapsed((prev) => !prev)}
         size="icon"
@@ -37,5 +40,3 @@ export default function Sidebar({
     </aside>
   );
 }
-
-
