@@ -5,9 +5,10 @@ import { useFormContext } from "react-hook-form";
 
 export interface TextfieldProps extends FormFieldProps {
   type?: "text" | "email" | "password" | "number" | "tel" | "url";
+  className?: string|undefined;
 }
 
-export function Textfield({ name, label, placeholder, type = "text" }: TextfieldProps) {
+export function Textfield({ className, name, label, placeholder, type = "text" }: TextfieldProps) {
   const { control } = useFormContext();
   return (
     <FormField
@@ -17,7 +18,7 @@ export function Textfield({ name, label, placeholder, type = "text" }: Textfield
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} type={type} {...field} />
+            <Input className={className} placeholder={placeholder} type={type} {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>

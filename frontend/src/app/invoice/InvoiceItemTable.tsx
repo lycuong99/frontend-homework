@@ -2,15 +2,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, TrashIcon } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { Textfield } from "@/components/form-elements/text-field";
 import { formatCurrency } from "@/utils/number-format";
 
 export const InvoiceItemTable = () => {
   const { control } = useFormContext();
-  const { fields, append, prepend, remove, swap, move, insert, replace } = useFieldArray({
+  const { fields, append, remove,} = useFieldArray({
     control,
     name: "items",
   });
@@ -19,7 +17,6 @@ export const InvoiceItemTable = () => {
     <Card>
       <CardHeader>
         <CardTitle>Items</CardTitle>
-        {/* <CardDescription>Lipsum dolor sit amet, consectetur adipiscing elit</CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>
@@ -36,17 +33,17 @@ export const InvoiceItemTable = () => {
           <TableBody>
             {fields.map((item, index) => (
               <TableRow key={item.id}>
-                <TableCell className="font-semibold">
-                  <Textfield name={`items.${index}.name`} placeholder="Item" />
+                <TableCell className="font-medium">
+                  <Textfield name={`items.${index}.name`} placeholder={"Item "+(index+1)} />
                 </TableCell>
                 <TableCell>
-                  <Textfield name={`items.${index}.quantity`} />
+                  <Textfield name={`items.${index}.quantity`} type="number"  />
                 </TableCell>
                 <TableCell>
                   <Textfield name={`items.${index}.unitPrice`} />
                 </TableCell>
                 <TableCell>
-                  <Textfield name={`items.${index}.price`} />
+                  <Textfield name={`items.${index}.price`} type="number" />
                 </TableCell>
                 <TableCell>{formatCurrency((results[index]?.quantity ?? 0) * (results[index]?.price ?? 0))}</TableCell>
                 <TableCell>

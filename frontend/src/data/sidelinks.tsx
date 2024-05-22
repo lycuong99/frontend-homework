@@ -1,4 +1,5 @@
-import { Dot, LayoutDashboard, LucideIcon, Settings } from "lucide-react";
+
+import { Dot, LayoutDashboard, LucideIcon, Paperclip, Receipt, Settings } from "lucide-react";
 export interface NavLink {
   title: string;
   label?: string;
@@ -16,6 +17,12 @@ export const sidelinks: SideLink[] = [
     label: "",
     href: "/",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Invoice",
+    label: "",
+    href: "/invoice",
+    icon: Receipt,
   },
   {
     title: "Customer",

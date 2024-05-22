@@ -1,21 +1,26 @@
-export type InvoiceStatus = "draft" | "late" | "paid" | "unpaid";
+export type InvoiceStatus = "draft" | "late" | "paid" | "pending";
 export type Invoice = {
   id: string;
   //   title: string;
-  status: "draft" | "late" | "paid" | "unpaid";
+  status: InvoiceStatus;
   amount: number;
-  //   createDate: Date | string;
+  createDate: Date | string;
   dueDate: Date | string;
   customer: Customer;
   items?: InvoiceLineItem[];
+  tax: number;
+  notes?: string;
+  bankAccount?: string;
+  bankName?: string;
 };
 
 export type InvoiceLineItem = {
   id: number;
   name: string;
-  amount: number;
+  amount?: number;
   quantity: number;
-  unitPrice: number;
+  unitPrice: string;
+  price: number;
 };
 
 export type InvoiceNote = {
@@ -25,11 +30,12 @@ export type InvoiceNote = {
 };
 
 export type Customer = {
-  id: number;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  email: string;
+  id?: number;
+  name?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  email?: string;
+  phone?: string;
 };

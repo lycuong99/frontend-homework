@@ -36,11 +36,6 @@ import {
       icon: CircleIcon,
     },
     {
-      value: "unpaid",
-      label: "Unpaid",
-      icon: StopwatchIcon,
-    },
-    {
       value: "paid",
       label: "Paid",
       icon: CheckCircledIcon,
