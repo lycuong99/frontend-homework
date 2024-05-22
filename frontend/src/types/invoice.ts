@@ -8,7 +8,7 @@ export type Invoice = {
   dueDate: Date | string;
   customer: Customer;
   items?: InvoiceLineItem[];
-  tax: number;
+  tax?: number;
   notes?: string;
   bankAccount?: string;
   bankName?: string;

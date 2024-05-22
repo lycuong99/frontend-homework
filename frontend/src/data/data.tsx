@@ -41,7 +41,7 @@ import {
       icon: CheckCircledIcon,
     },
     {
-      value: "overdue",
+      value: "late",
       label: "Overdue",
       icon: CrossCircledIcon,
     },

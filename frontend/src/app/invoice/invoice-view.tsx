@@ -1,3 +1,4 @@
+"use client";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useStore } from "@/store";
 import { Invoice } from "@/types/invoice";
 import { formatDate } from "@/utils/date-format";
 import { formatCurrency } from "@/utils/number-format";
@@ -19,44 +21,49 @@ function getSubtotal(items: { quantity: number; price: number }[]) {
 function getTotal(subtotal: number, taxInPercent: number) {
   return subtotal + taxInPercent * subtotal;
 }
-
-export function InvoiceView() {
-  const invoice: Invoice = {
-    id: "MX7553",
-    status: "draft",
-    createDate: "2019-01-01",
-    dueDate: "2019-01-01",
-    amount: 1000,
-    tax: 10,
-    notes: "Message to you",
-    customer: {
+const sample = {
+  id: "MX7553",
+  status: "draft",
+  createDate: "2019-01-01",
+  dueDate: "2019-01-01",
+  amount: 1000,
+  tax: 10,
+  notes: "Message to you",
+  customer: {
+    id: 123,
+    name: "Ly Van Cuong",
+    email: "lycuong99@gmail.com",
+    phone: "0987654321",
+    address: "123 Street, District 9, Ho Chi Minh City",
+  },
+  items: [
+    {
       id: 123,
-      name: "Ly Van Cuong",
-      email: "lycuong99@gmail.com",
-      phone: "0987654321",
-      address: "123 Street, District 9, Ho Chi Minh City",
+      name: "p1",
+      quantity: 10,
+      unitPrice: "pieces",
+      price: 10,
     },
-    items: [
-      {
-        id: 123,
-        name: "p1",
-        quantity: 10,
-        unitPrice: "pieces",
-        price: 10,
-      },
-      {
-        id: 123,
-        name: "p1",
-        quantity: 10,
-        unitPrice: "pieces",
-        price: 20,
-      },
-    ],
-  };
+    {
+      id: 123,
+      name: "p1",
+      quantity: 10,
+      unitPrice: "pieces",
+      price: 20,
+    },
+  ],
+};
+
+export function InvoiceView({ id }: { id: string }) {
+  const { getInvoice } = useStore();
+  const invoice = getInvoice(id);
+
+  if (!invoice) return null;
 
   const subtotal = getSubtotal(invoice.items ?? []);
-  const taxFee = (subtotal * invoice.tax) / 100;
-  const total = getTotal(subtotal, invoice.tax);
+  const taxFee = (subtotal * (invoice.tax ?? 0)) / 100;
+  const total = getTotal(subtotal, invoice.tax ?? 0);
+
   return (
     <Card className="p-8 flex flex-col gap-12">
       <CardTitle className="text-2xl flex items-center gap-4">
@@ -87,7 +94,9 @@ export function InvoiceView() {
             <TableHead className="w-[120px]">Quantity</TableHead>
             <TableHead className="w-[220px]">Unit Price</TableHead>
             <TableHead className="text-right">Price</TableHead>
-            <TableHead className="text-right" align="right">Amount</TableHead>
+            <TableHead className="text-right" align="right">
+              Amount
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -97,7 +106,9 @@ export function InvoiceView() {
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.quantity}</TableCell>
               <TableCell>{item.unitPrice}</TableCell>
-              <TableCell className="text-right">{formatCurrency(item.price)}</TableCell>
+              <TableCell className="text-right">
+                {formatCurrency(item.price)}
+              </TableCell>
               <TableCell className="text-right">
                 {formatCurrency((item?.quantity ?? 0) * (item?.price ?? 0))}
               </TableCell>
@@ -107,7 +118,9 @@ export function InvoiceView() {
           <tr>
             <TableCell colSpan={4}></TableCell>
             <TableCell className="text-gray-600 text-right">Subtotal</TableCell>
-            <TableCell className="text-right">{formatCurrency(subtotal)}</TableCell>
+            <TableCell className="text-right">
+              {formatCurrency(subtotal)}
+            </TableCell>
           </tr>
 
           <tr>
@@ -115,13 +128,19 @@ export function InvoiceView() {
             <TableCell className="text-gray-600 text-right">
               Tax {invoice.tax ?? "-"}%
             </TableCell>
-            <TableCell className="text-right">{formatCurrency(taxFee)}</TableCell>
+            <TableCell className="text-right">
+              {formatCurrency(taxFee)}
+            </TableCell>
           </tr>
 
           <tr>
             <TableCell colSpan={4}></TableCell>
-            <TableCell className="font-semibold text-lg text-right">Total</TableCell>
-            <TableCell className="font-semibold text-lg text-right">{formatCurrency(total)}</TableCell>
+            <TableCell className="font-semibold text-lg text-right">
+              Total
+            </TableCell>
+            <TableCell className="font-semibold text-lg text-right">
+              {formatCurrency(total)}
+            </TableCell>
           </tr>
         </TableBody>
       </Table>

@@ -55,6 +55,10 @@ const config = {
         yellow: {
           DEFAULT: "#eab308",
           foreground: "#713f12",
+        },
+        success: {
+          DEFAULT: "#22c55e",
+          foreground: "#14532d",
         }
       },
       borderRadius: {

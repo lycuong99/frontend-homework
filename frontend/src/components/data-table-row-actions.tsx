@@ -46,9 +46,12 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem asChild>
           <Link href={`/invoice/${invoice.id}`}>Edit</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={`/invoice/${invoice.id}`}>View</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>
           Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+          {/* <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut> */}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

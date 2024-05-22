@@ -9,7 +9,7 @@ export default async function InvoiceViewPage({
   return (
     <main className=" contain px-16 py-10">
       {/* Welcome to Homepage {params.id} */}
-      <InvoiceView />
+      <InvoiceView id={params.id} />
     </main>
   );
 }

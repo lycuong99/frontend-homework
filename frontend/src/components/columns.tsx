@@ -9,15 +9,19 @@ import { labels, priorities, statuses } from "../data/data";
 import { Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { Invoice } from "@/types/invoice";
+import { Invoice, InvoiceStatus } from "@/types/invoice";
 import { formatCurrency } from "@/utils/number-format";
+import { StatusBadge } from "./status-badge";
 
 export const columns: ColumnDef<Invoice>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
         className="translate-y-[2px]"
@@ -36,30 +40,40 @@ export const columns: ColumnDef<Invoice>[] = [
   },
   {
     accessorKey: "id",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="InvoiceID" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="InvoiceID" />
+    ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: "customer",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Billed to" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Billed to" />
+    ),
     cell: ({ row }) => {
       // const label = labels.find((label) => label.value === row.original.label);
       const customerName = row.original.customer.name;
       return (
         <div className="flex space-x-2">
           {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-          <span className="max-w-[500px] truncate font-medium">{customerName}</span>
+          <span className="max-w-[500px] truncate font-medium">
+            {customerName}
+          </span>
         </div>
       );
     },
   },
   {
     accessorKey: "status",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
     cell: ({ row }) => {
-      const status = statuses.find((status) => status.value === row.getValue("status"));
+      const status = statuses.find(
+        (status) => status.value === row.getValue("status")
+      );
 
       if (!status) {
         return null;
@@ -67,8 +81,9 @@ export const columns: ColumnDef<Invoice>[] = [
 
       return (
         <div className="flex w-[100px] items-center">
-          {/* {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />} */}
-          <Badge>{status.label}</Badge>
+          <StatusBadge className="px-1.5 py-1 text-xs" status={row.getValue("status") as InvoiceStatus}>
+            {status.label}
+          </StatusBadge>
         </div>
       );
     },
@@ -80,7 +95,9 @@ export const columns: ColumnDef<Invoice>[] = [
   },
   {
     accessorKey: "amount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Amount" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Amount" />
+    ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
 
@@ -95,8 +112,12 @@ export const columns: ColumnDef<Invoice>[] = [
   },
   {
     accessorKey: "dueDate",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Due Date" />,
-    cell: ({ row }) => <div className="w-[100px]">{row.getValue("dueDate")}</div>,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Due Date" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[100px]">{row.getValue("dueDate")}</div>
+    ),
     // enableSorting: false,
     // enableHiding: false,
   },
