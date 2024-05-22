@@ -1,0 +1,30 @@
+[
+  {
+    "id": "MX7553",
+    "status": "draft",
+    "dueDate": "2019-01-01",
+    "amount": 1000,
+    "customer": {
+      "id": 123,
+      "name": "Ly Van Cuong"
+    },
+    "items": [
+      {
+        "id": "123",
+        "name": "p1",
+        "quantity": 10,
+        "unitPrice": 100
+      }
+    ]
+  },
+  {
+    "id": "MX7554",
+    "status": "draft",
+    "dueDate": "2019-01-01",
+    "amount": 1000,
+    "customer": {
+      "id": 123,
+      "name": "Ly Van Cuong"
+    }
+  }
+]
