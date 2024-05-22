@@ -13,32 +13,50 @@ import { Selectfield } from "@/components/form-elements/select-field";
 import { InvoiceItemTable } from "@/app/invoice/InvoiceItemTable";
 import { Separator } from "@/components/ui/separator";
 import { TextareaControl } from "@/components/form-elements/text-area";
-export function InvoiceForm() {
-  const form = useForm<Invoice>({
-    defaultValues: {
-      id: "MX7553",
-      status: "draft",
-      dueDate: "2019-01-01",
-      amount: 1000,
-      tax: 0,
-      customer: {
-        id: 123,
-        name: "Ly Van Cuong",
-      },
-      items: [
-        {
-          id: 123,
-          name: "p1",
-          quantity: 10,
-          unitPrice: "pieces",
-        },
-      ],
+import { getSubtotal, getTotal } from "./utils";
+import Link from "next/link";
+const sample = {
+  id: "MX7553",
+  status: "draft",
+  dueDate: "2019-01-01",
+  amount: 1000,
+  tax: 0,
+  customer: {
+    id: 123,
+    name: "Ly Van Cuong",
+  },
+  items: [
+    {
+      id: 123,
+      name: "p1",
+      quantity: 10,
+      unitPrice: "pieces",
     },
+  ],
+};
+
+export function InvoiceForm({
+  onSubmit: onSubmitCallback,
+  defaultValues,
+}: {
+  onSubmit: (data: Invoice) => void;
+  defaultValues?: Invoice;
+}) {
+  const form = useForm<Invoice>({
+    defaultValues: defaultValues,
   });
 
   function onSubmit(data: Invoice) {
     console.log(data);
+    const subtotal = getSubtotal(data.items ?? []);
+    const total = getTotal(subtotal, data.tax ?? 0);
+    const submitData = {
+      ...data,
+      amount: total,
+    };
+    onSubmitCallback(submitData);
   }
+
   const results = useWatch({ control: form.control, name: "items" });
 
   function getSubTotal(items: Invoice["items"]) {
@@ -120,7 +138,6 @@ export function InvoiceForm() {
             <div className="w-full">
               <TextareaControl name="note" label="Notes" placeholder="Notes" />
             </div>
-
           </CardContent>
         </Card>
 
@@ -167,8 +184,8 @@ export function InvoiceForm() {
         </div>
 
         <div className="flex gap-2 w-[400px] self-end">
-          <Button type="submit" className="w-full" variant={"outline"}>
-            Save as Draft
+          <Button type="submit" className="w-full" variant={"outline"} asChild>
+            <Link href="/invoice">Cancel</Link>
           </Button>
           <Button type="submit" className="w-full">
             Save & Send
