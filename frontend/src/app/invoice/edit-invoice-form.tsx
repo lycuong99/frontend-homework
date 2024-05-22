@@ -4,6 +4,7 @@ import { useStore } from "@/store";
 import { InvoiceForm } from "./invoice-form";
 import { Invoice } from "@/types/invoice";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 
 const EditInvoiceForm = ({invoiceId}: {invoiceId: string}) => {
@@ -13,6 +14,7 @@ const EditInvoiceForm = ({invoiceId}: {invoiceId: string}) => {
     console.log(data);
 
     updateInvoice(data)
+    toast("Invoice has been updated.")
     router.push('/invoice')
   
   };
