@@ -1,14 +1,28 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { FormFieldProps } from "@/types/form";
 import { useFormContext } from "react-hook-form";
 
 export interface TextfieldProps extends FormFieldProps {
   type?: "text" | "email" | "password" | "number" | "tel" | "url";
-  className?: string|undefined;
+  className?: string | undefined;
+  readOnly?: boolean;
 }
 
-export function Textfield({ className, name, label, placeholder, type = "text" }: TextfieldProps) {
+export function Textfield({
+  className,
+  name,
+  label,
+  placeholder,
+  type = "text",
+  readOnly = false,
+}: TextfieldProps) {
   const { control } = useFormContext();
   return (
     <FormField
@@ -18,7 +32,13 @@ export function Textfield({ className, name, label, placeholder, type = "text" }
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input className={className} placeholder={placeholder} type={type} {...field} />
+            <Input
+              className={className}
+              placeholder={placeholder}
+              type={type}
+              {...field}
+              readOnly={readOnly}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>

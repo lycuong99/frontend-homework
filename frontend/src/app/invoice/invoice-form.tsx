@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Form, FormLabel } from "@/components/ui/form";
 import { Invoice } from "@/types/invoice";
 import { useForm, useWatch } from "react-hook-form";
 import { SelectItem } from "@/components/ui/select";
@@ -20,10 +20,14 @@ import { invoiceSchema } from "@/data/schema";
 import { formatCurrency } from "@/utils/number-format";
 import { Dot, MailCheck, MailIcon, MailPlus } from "lucide-react";
 import { toast } from "sonner";
+import { useStore } from "@/store";
+import { useMemo, useState } from "react";
+import { Combobox } from "@/components/ui/combo-box";
+import { register } from "module";
+import { Label } from "@/components/ui/label";
 
 const sample: Partial<Invoice> = {
   status: "draft",
-  
 };
 
 export function InvoiceForm({
@@ -64,6 +68,20 @@ export function InvoiceForm({
     form.setValue("isSentMail", true);
     toast("Mail has been sent.");
   }
+
+  const { customers } = useStore();
+  const customerOptions = useMemo(() => {
+    return customers.map(({ id, name }) => {
+      return {
+        label: name,
+        value: id,
+      };
+    });
+  }, [customers]);
+
+  console.log(customerOptions);
+
+  const [customerId, setCustomerId] = useState("");
   return (
     <Form {...form}>
       <form
@@ -78,29 +96,47 @@ export function InvoiceForm({
           </CardHeader>
           <CardContent className="flex flex-col xl:flex-row gap-8 flex-wrap">
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield
+              <div className="space-y-2">
+                <FormLabel>Customer</FormLabel>
+                <Combobox
+                 className="space-y-2"
+                  options={customerOptions}
+                  value={customerId}
+                  onChange={(newValue) => {
+                    setCustomerId(newValue);
+                    const customer = customers.find((c) => (c.id = customerId));
+                    form.setValue("customer", { ...customer });
+                  }}
+                  placeholder="customer"
+                />
+              </div>
+              {/* <Textfield
                 className="flex-1"
                 name="customer.name"
                 label="Customer Name"
                 placeholder="Jonh dow"
-              />
+                readOnly
+              /> */}
 
               <Textfield
                 name="customer.phone"
                 label="Customer Phone"
                 placeholder="Customer Number"
+                readOnly
               />
 
               <Textfield
                 name="customer.address"
                 label="Address"
                 placeholder="Address"
+                readOnly
               />
               <Textfield
                 name="customer.email"
                 label="Email"
                 // type="email"
                 placeholder="abc@example.com"
+                readOnly
               />
             </div>
 
@@ -149,7 +185,6 @@ export function InvoiceForm({
 
         <div className="flex justify-between">
           <Payment />
-
           <div className="flex flex-col gap-2 w-[400px]">
             <div className="flex justify-between gap-12">
               <p>Subtotal</p>
@@ -215,7 +250,7 @@ const Payment = () => {
           label="Bank Abount"
           placeholder="ex. 123456789"
         />
-         <Textfield
+        <Textfield
           className="flex-1"
           name="accountName"
           label="Abount Name"
