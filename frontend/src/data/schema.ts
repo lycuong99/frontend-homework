@@ -9,9 +9,9 @@ const invoiceLineItemSchema = z.object({
   id: z.number(),
   name: z.string(),
   amount: z.coerce.number().optional(),
-  quantity: z.coerce.number().positive(),
+  quantity: z.coerce.number().nonnegative(),
   rate: z.string(),
-  price: z.coerce.number().positive(),
+  price: z.coerce.number().nonnegative(),
 });
 
 const customerSchema = z.object({
@@ -39,7 +39,7 @@ const invoiceSchema = z.object({
   dueDate: z.union([z.date(), z.string()]),
   customer: customerSchema,
   items: z.array(invoiceLineItemSchema).optional(),
-  tax: z.coerce.number().positive().optional(),
+  tax: z.coerce.number().nonnegative().optional(),
   notes: z.string().optional(),
   bankAccount: z.string().optional(),
   bankName: z.string().optional(),

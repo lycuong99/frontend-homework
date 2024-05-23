@@ -14,35 +14,22 @@ import { InvoiceItemTable } from "@/app/invoice/InvoiceItemTable";
 import { Separator } from "@/components/ui/separator";
 import { TextareaControl } from "@/components/form-elements/text-area";
 import { getSubtotal, getTotal } from "./utils";
-import { zodResolver } from "@hookform/resolvers/zod"
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { invoiceSchema } from "@/data/schema";
-const sample = {
-  id: "MX7553",
+import { formatCurrency } from "@/utils/number-format";
+
+const sample: Partial<Invoice> = {
   status: "draft",
-  dueDate: "2019-01-01",
-  amount: 1000,
-  tax: 0,
-  customer: {
-    id: 123,
-    name: "Ly Van Cuong",
-  },
-  items: [
-    {
-      id: 123,
-      name: "p1",
-      quantity: 10,
-      rate: "pieces",
-    },
-  ],
+  dueDate: new Date(),
 };
 
 export function InvoiceForm({
   onSubmit: onSubmitCallback,
-  defaultValues,
+  defaultValues = sample,
 }: {
   onSubmit: (data: Invoice) => void;
-  defaultValues?: Invoice;
+  defaultValues?: Partial<Invoice>;
 }) {
   const form = useForm<Invoice>({
     defaultValues: defaultValues,
@@ -61,64 +48,32 @@ export function InvoiceForm({
   }
 
   const results = useWatch({ control: form.control, name: "items" });
+  const tax = useWatch({ control: form.control, name: "tax" });
 
-  function getSubTotal(items: Invoice["items"]) {
-    let result = items?.reduce(
-      (total, item) => total + item.quantity * item.price,
-      0
-    );
-    return Number.isNaN(result) ? "-" : result;
-  }
+
+  const subtotal = getSubtotal(results?? []);
+  const total = getTotal(subtotal, tax?? 0);
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Invoice Details</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col xl:flex-row gap-8 flex-wrap">
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield
-                className="flex-1"
-                name="customer.name"
-                label="Customer Name"
-                placeholder="Jonh dow"
-              />
+              <Textfield className="flex-1" name="customer.name" label="Customer Name" placeholder="Jonh dow" />
 
-              <Textfield
-                name="customer.phone"
-                label="Customer Phone"
-                placeholder="Customer Number"
-              />
+              <Textfield name="customer.phone" label="Customer Phone" placeholder="Customer Number" />
 
-              <Textfield
-                name="customer.address"
-                label="Address"
-                placeholder="Address"
-              />
-              <Textfield
-                name="customer.email"
-                label="Email"
-                type="email"
-                placeholder="abc@example.com"
-              />
+              <Textfield name="customer.address" label="Address" placeholder="Address" />
+              <Textfield name="customer.email" label="Email" type="email" placeholder="abc@example.com" />
             </div>
 
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield
-                name="id"
-                label="Invoice Number"
-                placeholder="Invoice Number"
-              />
+              <Textfield name="id" label="Invoice Number" placeholder="Invoice Number" />
 
-              <Selectfield
-                name="status"
-                label="Status"
-                placeholder="Select a status"
-              >
+              <Selectfield name="status" label="Status" placeholder="Select a status">
                 {statuses.map((status) => (
                   <SelectItem key={status.value} value={status.value}>
                     {status.label}
@@ -126,16 +81,8 @@ export function InvoiceForm({
                 ))}
               </Selectfield>
 
-              <DatePicker
-                name="createDate"
-                label="Invoice Date"
-                placeholder="Pick a date"
-              />
-              <DatePicker
-                name="dueDate"
-                label="Due Date"
-                placeholder="Pick a date"
-              />
+              <DatePicker name="createDate" label="Invoice Date" placeholder="Pick a date" />
+              <DatePicker name="dueDate" label="Due Date" placeholder="Pick a date" />
             </div>
 
             <div className="w-full">
@@ -150,38 +97,23 @@ export function InvoiceForm({
           <div>
             <h2 className="text-lg font-semibold">Payment</h2>
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield
-                className="flex-1"
-                name="bankName"
-                label="Bank Name"
-                placeholder="ex. BIDV Bank"
-              />
-              <Textfield
-                className="flex-1"
-                name="banAccount"
-                label="Bank Abount"
-                placeholder="10102012121212"
-              />
+              <Textfield className="flex-1" name="bankName" label="Bank Name" placeholder="ex. BIDV Bank" />
+              <Textfield className="flex-1" name="banAccount" label="Bank Abount" placeholder="10102012121212" />
             </div>
           </div>
 
           <div className="flex flex-col gap-2 w-[400px]">
             <div className="flex justify-between gap-12">
               <p>Subtotal</p>
-              <p>{getSubTotal(results)}</p>
+              <p>{formatCurrency(subtotal)}</p>
             </div>
             <div className="flex items-center  justify-between gap-12">
               <p>Tax(%)</p>
-              <Textfield
-                className="text-right w-20"
-                name="tax"
-                placeholder="%"
-                type="number"
-              />
+              <Textfield className="text-right w-20" name="tax" placeholder="%" type="number" />
             </div>
             <div className="flex  justify-between gap-12">
               <p className="font-bold">Total</p>
-              <p>{getSubTotal(results)}</p>
+              <p>{formatCurrency(total)}</p>
             </div>
           </div>
         </div>
