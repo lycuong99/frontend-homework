@@ -1,40 +1,277 @@
 [
   {
-    "id": "MX7553",
-    "status": "paid",
-    "dueDate": "2019-01-01",
-    "createDate": "2019-01-01",
-    "amount": 1000,
-    "customer": {
-      "id": 123,
-      "name": "Ly Van Cuong"
+    "id":"INV001",
+    "status":"draft",
+    "amount":5000,
+    "createDate":"2023-04-01",
+    "dueDate":"2023-04-30",
+    "customer":{
+      "id":1,
+      "name":"Acme Inc.",
+      "address":"123 Main St",
+      "city":"Anytown",
+      "state":"CA",
+      "zip":"12345",
+      "email":"sales@acme.com",
+      "phone":"555-1234"
     },
-    "tax": 1,
-    "items": [
+    "items":[
       {
-        "id": "123",
-        "name": "p1",
-        "quantity": 10,
-        "unitPrice": 100,
-        "price": 10
+        "id":1,
+        "name":"Product A",
+        "quantity":10,
+        "rate":"100.00",
+        "price":1000
       },
       {
-        "id": "124",
-        "name": "p2",
-        "quantity": 10,
-        "unitPrice": 100,
-        "price": 10
+        "id":2,
+        "name":"Service B",
+        "quantity":20,
+        "rate":"200.00",
+        "price":4000
       }
-    ]
+    ],
+    "tax":8.25,
+    "notes":"Please remit payment within 30 days.",
+    "bankAccount":"1234567890",
+    "bankName":"Acme Bank"
   },
   {
-    "id": "MX7554",
-    "status": "draft",
-    "dueDate": "2019-01-01",
-    "amount": 1000,
-    "customer": {
-      "id": 123,
-      "name": "Ly Van Cuong"
-    }
+    "id":"INV002",
+    "status":"paid",
+    "amount":2500,
+    "createDate":"2023-03-15",
+    "dueDate":"2023-04-15",
+    "customer":{
+      "id":2,
+      "name":"Beta Corp.",
+      "address":"456 Oak Rd",
+      "city":"Sometown",
+      "state":"NY",
+      "zip":"67890",
+      "email":"billing@beta.com"
+    },
+    "items":[
+      {
+        "id":3,
+        "name":"Product C",
+        "quantity":5,
+        "rate":"500.00",
+        "price":2500
+      }
+    ],
+    "tax":7.75
+  },
+  {
+    "id":"INV003",
+    "status":"late",
+    "amount":1200,
+    "createDate":"2023-02-01",
+    "dueDate":"2023-03-01",
+    "customer":{
+      "id":3,
+      "name":"Gamma LLC",
+      "address":"789 Elm St",
+      "city":"Otherton",
+      "state":"TX",
+      "zip":"54321",
+      "phone":"555-5678"
+    },
+    "items":[
+      {
+        "id":4,
+        "name":"Service D",
+        "quantity":1,
+        "rate":"1200.00",
+        "price":1200
+      }
+    ],
+    "notes":"Payment is past due. Please remit immediately."
+  },
+  {
+    "id":"INV004",
+    "status":"pending",
+    "amount":7500,
+    "createDate":"2023-04-15",
+    "dueDate":"2023-05-15",
+    "customer":{
+      "id":4,
+      "name":"Delta Inc.",
+      "address":"246 Pine Ave",
+      "city":"Anothertown",
+      "state":"FL",
+      "zip":"13579",
+      "email":"accounting@delta.com"
+    },
+    "items":[
+      {
+        "id":5,
+        "name":"Product E",
+        "quantity":25,
+        "rate":"300.00",
+        "price":7500
+      }
+    ],
+    "tax":6.5
+  },
+  {
+    "id":"INV005",
+    "status":"draft",
+    "amount":3000,
+    "createDate":"2023-04-20",
+    "dueDate":"2023-05-20",
+    "customer":{
+      "id":5,
+      "name":"Epsilon Corp.",
+      "address":"135 Maple Ln",
+      "city":"Yetanothertown",
+      "state":"IL",
+      "zip":"24680",
+      "phone":"555-9012"
+    },
+    "items":[
+      {
+        "id":6,
+        "name":"Service F",
+        "quantity":1,
+        "rate":"3000.00",
+        "price":3000
+      }
+    ],
+    "tax":8
+  },
+  {
+    "id":"INV006",
+    "status":"paid",
+    "amount":1800,
+    "createDate":"2023-03-01",
+    "dueDate":"2023-04-01",
+    "customer":{
+      "id":6,
+      "name":"Zeta LLC",
+      "address":"987 Cedar Rd",
+      "city":"Somewhereelse",
+      "state":"NJ",
+      "zip":"98765",
+      "email":"billing@zeta.com"
+    },
+    "items":[
+      {
+        "id":7,
+        "name":"Product G",
+        "quantity":6,
+        "rate":"300.00",
+        "price":1800
+      }
+    ],
+    "tax":6.625,
+    "bankAccount":"9876543210",
+    "bankName":"Zeta Bank"
+  },
+  {
+    "id":"INV007",
+    "status":"late",
+    "amount":4000,
+    "createDate":"2023-01-15",
+    "dueDate":"2023-02-15",
+    "customer":{
+      "id":7,
+      "name":"Eta Inc.",
+      "address":"753 Oak St",
+      "city":"Anotherplace",
+      "state":"PA",
+      "zip":"45678",
+      "phone":"555-3456"
+    },
+    "items":[
+      {
+        "id":8,
+        "name":"Service H",
+        "quantity":1,
+        "rate":"4000.00",
+        "price":4000
+      }
+    ],
+    "notes":"Payment is past due. Please remit immediately or services will be suspended."
+  },
+  {
+    "id":"INV008",
+    "status":"pending",
+    "amount":6000,
+    "createDate":"2023-04-01",
+    "dueDate":"2023-05-01",
+    "customer":{
+      "id":8,
+      "name":"Theta Corp.",
+      "address":"159 Maple Ave",
+      "city":"Yetanotherplace",
+      "state":"OH",
+      "zip":"12345",
+      "email":"accounting@theta.com"
+    },
+    "items":[
+      {
+        "id":9,
+        "name":"Product I",
+        "quantity":20,
+        "rate":"300.00",
+        "price":6000
+      }
+    ],
+    "tax":7.25
+  },
+  {
+    "id":"INV009",
+    "status":"draft",
+    "amount":2400,
+    "createDate":"2023-04-25",
+    "dueDate":"2023-05-25",
+    "customer":{
+      "id":9,
+      "name":"Iota LLC",
+      "address":"753 Pine St",
+      "city":"Somewhereelse",
+      "state":"MI",
+      "zip":"67890",
+      "phone":"555-7890"
+    },
+    "items":[
+      {
+        "id":10,
+        "name":"Service J",
+        "quantity":1,
+        "rate":"2400.00",
+        "price":2400
+      }
+    ],
+    "tax":6
+  },
+  {
+    "id":"INV010",
+    "status":"paid",
+    "amount":9000,
+    "createDate":"2023-03-10",
+    "dueDate":"2023-04-10",
+    "customer":{
+      "id":10,
+      "name":"Kappa Inc.",
+      "address":"456 Elm Ave",
+      "city":"Anotherplace",
+      "state":"VA",
+      "zip":"54321",
+      "email":"billing@kappa.com"
+    },
+    "items":[
+      {
+        "id":11,
+        "name":"Product K",
+        "quantity":30,
+        "rate":"300.00",
+        "price":9000
+      }
+    ],
+    "tax":5.3,
+    "bankAccount":"1234567890",
+    "bankName":"Kappa Bank"
   }
 ]
