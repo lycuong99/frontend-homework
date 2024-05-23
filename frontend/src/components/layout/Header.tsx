@@ -13,31 +13,30 @@ import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 export default function Header() {
   const pathname = usePathname();
-  console.log(pathname, pathname.split("/"));
+  const pathSegments = pathname.split("/").filter(Boolean);
 
   return (
-    <header className="flex justify-between p-4">
+    <header className="flex justify-between container py-2">
       {/* <h1 className="text-2xl"></h1> */}
-      <Breadcrumb>
+      <Breadcrumb className="items-center flex">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href={`/`}>Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
 
-          {pathname
-            .split("/")
-            .filter(Boolean)
-            .map((path, index) => (
-              <Fragment key={path}>
-                <BreadcrumbItem key={index}>
-                  <BreadcrumbLink href={`/${path}`}>
-                    {path || "Home"}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </Fragment>
-            ))}
+          {pathSegments.map((segment, index) => (
+            <Fragment key={segment}>
+              <BreadcrumbItem key={index}>
+                <BreadcrumbLink
+                  href={`/${pathSegments.slice(0, index + 1).join("/")}`}
+                >
+                  {segment}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+            </Fragment>
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
       <Button variant="ghost" className="p-2">
