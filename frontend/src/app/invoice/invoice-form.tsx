@@ -14,7 +14,9 @@ import { InvoiceItemTable } from "@/app/invoice/InvoiceItemTable";
 import { Separator } from "@/components/ui/separator";
 import { TextareaControl } from "@/components/form-elements/text-area";
 import { getSubtotal, getTotal } from "./utils";
+import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link";
+import { invoiceSchema } from "@/data/schema";
 const sample = {
   id: "MX7553",
   status: "draft",
@@ -30,7 +32,7 @@ const sample = {
       id: 123,
       name: "p1",
       quantity: 10,
-      unitPrice: "pieces",
+      rate: "pieces",
     },
   ],
 };
@@ -44,6 +46,7 @@ export function InvoiceForm({
 }) {
   const form = useForm<Invoice>({
     defaultValues: defaultValues,
+    resolver: zodResolver(invoiceSchema),
   });
 
   function onSubmit(data: Invoice) {
