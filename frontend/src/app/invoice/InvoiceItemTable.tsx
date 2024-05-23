@@ -47,7 +47,7 @@ export const InvoiceItemTable = () => {
                 </TableCell>
                 <TableCell>{formatCurrency((results?.[index]?.quantity ?? 0) * (results?.[index]?.price ?? 0))}</TableCell>
                 <TableCell>
-                  <Button size="icon" variant="outline" onClick={() => remove(index)}>
+                  <Button type="button"  size="icon" variant="outline" onClick={() => remove(index)}>
                     <TrashIcon className="h-4 w-4" />
                     <span className="sr-only">Delete</span>
                   </Button>
@@ -59,6 +59,7 @@ export const InvoiceItemTable = () => {
       </CardContent>
       <CardFooter className="justify-center border-t p-4">
         <Button
+        type="button"
           size="sm"
           variant="ghost"
           className="gap-1"
