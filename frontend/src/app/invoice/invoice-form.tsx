@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { invoiceSchema } from "@/data/schema";
 import { formatCurrency } from "@/utils/number-format";
+import { Dot } from "lucide-react";
 
 const sample: Partial<Invoice> = {
   status: "draft",
@@ -50,39 +51,79 @@ export function InvoiceForm({
   const results = useWatch({ control: form.control, name: "items" });
   const tax = useWatch({ control: form.control, name: "tax" });
 
-
-  const subtotal = getSubtotal(results?? []);
-  const total = getTotal(subtotal, tax?? 0);
+  const subtotal = getSubtotal(results ?? []);
+  const total = getTotal(subtotal, tax ?? 0);
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
+      >
         <Card>
           <CardHeader>
             <CardTitle>Invoice Details</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col xl:flex-row gap-8 flex-wrap">
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield className="flex-1" name="customer.name" label="Customer Name" placeholder="Jonh dow" />
+              <Textfield
+                className="flex-1"
+                name="customer.name"
+                label="Customer Name"
+                placeholder="Jonh dow"
+              />
 
-              <Textfield name="customer.phone" label="Customer Phone" placeholder="Customer Number" />
+              <Textfield
+                name="customer.phone"
+                label="Customer Phone"
+                placeholder="Customer Number"
+              />
 
-              <Textfield name="customer.address" label="Address" placeholder="Address" />
-              <Textfield name="customer.email" label="Email" type="email" placeholder="abc@example.com" />
+              <Textfield
+                name="customer.address"
+                label="Address"
+                placeholder="Address"
+              />
+              <Textfield
+                name="customer.email"
+                label="Email"
+                type="email"
+                placeholder="abc@example.com"
+              />
             </div>
 
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield name="id" label="Invoice Number" placeholder="Invoice Number" />
+              <Textfield
+                name="id"
+                label="Invoice Number"
+                placeholder="Invoice Number"
+              />
 
-              <Selectfield name="status" label="Status" placeholder="Select a status">
+              <Selectfield
+                name="status"
+                label="Status"
+                placeholder="Select a status"
+              >
                 {statuses.map((status) => (
-                  <SelectItem key={status.value} value={status.value}>
-                    {status.label}
+                  <SelectItem
+                    key={status.value}
+                    value={status.value}
+                    className="flex"
+                  >
+                    <div className="flex items-center">{status.label}</div>
                   </SelectItem>
                 ))}
               </Selectfield>
 
-              <DatePicker name="createDate" label="Invoice Date" placeholder="Pick a date" />
-              <DatePicker name="dueDate" label="Due Date" placeholder="Pick a date" />
+              <DatePicker
+                name="createDate"
+                label="Invoice Date"
+                placeholder="Pick a date"
+              />
+              <DatePicker
+                name="dueDate"
+                label="Due Date"
+                placeholder="Pick a date"
+              />
             </div>
 
             <div className="w-full">
@@ -97,8 +138,18 @@ export function InvoiceForm({
           <div>
             <h2 className="text-lg font-semibold">Payment</h2>
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield className="flex-1" name="bankName" label="Bank Name" placeholder="ex. BIDV Bank" />
-              <Textfield className="flex-1" name="banAccount" label="Bank Abount" placeholder="10102012121212" />
+              <Textfield
+                className="flex-1"
+                name="bankName"
+                label="Bank Name"
+                placeholder="ex. BIDV Bank"
+              />
+              <Textfield
+                className="flex-1"
+                name="banAccount"
+                label="Bank Abount"
+                placeholder="10102012121212"
+              />
             </div>
           </div>
 
@@ -109,7 +160,12 @@ export function InvoiceForm({
             </div>
             <div className="flex items-center  justify-between gap-12">
               <p>Tax(%)</p>
-              <Textfield className="text-right w-20" name="tax" placeholder="%" type="number" />
+              <Textfield
+                className="text-right w-20"
+                name="tax"
+                placeholder="%"
+                type="number"
+              />
             </div>
             <div className="flex  justify-between gap-12">
               <p className="font-bold">Total</p>

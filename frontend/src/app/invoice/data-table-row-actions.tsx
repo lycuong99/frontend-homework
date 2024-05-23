@@ -22,7 +22,7 @@ import { invoiceSchema } from "@/data/schema";
 import Link from "next/link";
 import { Invoice } from "@/types/invoice";
 import { useStore } from "@/store";
-import { AlertModal } from "./modal/alert-modal";
+import { AlertModal } from "../../components/modal/alert-modal";
 import { useState } from "react";
 
 interface DataTableRowActionsProps<TData> {

@@ -1,6 +1,6 @@
 "use client";
 import { DataTable } from "@/components/data-table";
-import { columns } from "@/components/columns";
+import { columns } from "@/app/invoice/columns";
 import { useStore } from "@/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
