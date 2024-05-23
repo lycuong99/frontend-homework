@@ -24,7 +24,7 @@ export const InvoiceItemTable = () => {
             <TableRow>
               <TableHead className="w-[320px]">Item Name</TableHead>
               <TableHead className="w-[120px]">Quantity</TableHead>
-              <TableHead className="w-[220px]">Unit Price</TableHead>
+              <TableHead className="w-[220px]">Rate</TableHead>
               <TableHead className="w-[220px]">Price</TableHead>
               <TableHead className="w-[220px]">Amount</TableHead>
               <TableHead>Action</TableHead>
@@ -40,12 +40,12 @@ export const InvoiceItemTable = () => {
                   <Textfield name={`items.${index}.quantity`} type="number"  />
                 </TableCell>
                 <TableCell>
-                  <Textfield name={`items.${index}.unitPrice`} />
+                  <Textfield name={`items.${index}.rate`} />
                 </TableCell>
                 <TableCell>
                   <Textfield name={`items.${index}.price`} type="number" />
                 </TableCell>
-                <TableCell>{formatCurrency((results[index]?.quantity ?? 0) * (results[index]?.price ?? 0))}</TableCell>
+                <TableCell>{formatCurrency((results?.[index]?.quantity ?? 0) * (results?.[index]?.price ?? 0))}</TableCell>
                 <TableCell>
                   <Button size="icon" variant="outline" onClick={() => remove(index)}>
                     <TrashIcon className="h-4 w-4" />
@@ -66,7 +66,7 @@ export const InvoiceItemTable = () => {
             append({
               name: `Item ${fields.length + 1}`,
               quantity: 1,
-              unitPrice: 100,
+              rate: "pieces",
               price: 100,
             })
           }
