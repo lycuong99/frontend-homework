@@ -12,6 +12,8 @@ export type Invoice = {
   notes?: string;
   bankAccount?: string;
   bankName?: string;
+  accountName?: string;
+  isSentMail?: boolean;
 };
 
 export type InvoiceLineItem = {
@@ -30,7 +32,7 @@ export type InvoiceNote = {
 };
 
 export type Customer = {
-  id?: number;
+  id?: string;
   name?: string;
   address?: string;
   city?: string;

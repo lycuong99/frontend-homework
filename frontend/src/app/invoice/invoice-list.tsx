@@ -16,7 +16,7 @@ import { statuses } from "@/data/data";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/status-badge";
 import { InvoiceStatus } from "@/types/invoice";
-
+import { DataTableToolbar } from "@/app/invoice/data-table-toolbar";
 
 const InvoiceList = () => {
   const { invoices } = useStore();
@@ -33,7 +33,7 @@ const InvoiceList = () => {
   }, [invoices, tab]);
 
   function countStatus(status: string) {
-    if(status === "all") return invoices.length
+    if (status === "all") return invoices.length;
     return invoices.filter((invoice) => invoice.status === status).length;
   }
   return (
@@ -47,17 +47,37 @@ const InvoiceList = () => {
       >
         <div className="w-full overflow-x-scroll pb-2">
           <TabsList>
-            <TabsTrigger value="all"  className="flex gap-2">All <Badge className="p-1 text-xs" variant={"default"}>{countStatus('all')}</Badge></TabsTrigger>
+            <TabsTrigger value="all" className="flex gap-2">
+              All{" "}
+              <Badge className="p-1 text-xs" variant={"default"}>
+                {countStatus("all")}
+              </Badge>
+            </TabsTrigger>
 
             {statuses.map((status) => (
-              <TabsTrigger className="flex gap-2" key={status.value} value={status.value}>
-                {status.label} <StatusBadge className="p-1 py-0.5" status={status.value as InvoiceStatus}>{countStatus(status.value)}</StatusBadge>
+              <TabsTrigger
+                className="flex gap-2"
+                key={status.value}
+                value={status.value}
+              >
+                {status.label}{" "}
+                <StatusBadge
+                  className="p-1 py-0.5"
+                  status={status.value as InvoiceStatus}
+                >
+                  {countStatus(status.value)}
+                </StatusBadge>
               </TabsTrigger>
             ))}
           </TabsList>
-         
         </div>
-        <DataTable data={invoicesFilter} columns={columns} />
+        <DataTable
+          data={invoicesFilter}
+          columns={columns}
+          toolbar={(table) => {
+            return <DataTableToolbar table={table} />;
+          }}
+        />
       </Tabs>
     </>
   );

@@ -2,17 +2,19 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { labels, priorities, statuses } from "../../data/data";
-import { Task } from "../../data/schema";
+import { statuses } from "../../data/data";
 import { DataTableColumnHeader } from "../../components/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Invoice, InvoiceStatus } from "@/types/invoice";
 import { formatCurrency } from "@/utils/number-format";
 import { StatusBadge } from "../../components/status-badge";
-
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+import { DATE_FORMAT } from "@/constants";
+import { format } from "date-fns";
+dayjs.extend(isBetween)
 export const columns: ColumnDef<Invoice>[] = [
   {
     id: "select",
@@ -116,8 +118,12 @@ export const columns: ColumnDef<Invoice>[] = [
       <DataTableColumnHeader column={column} title="Due Date" />
     ),
     cell: ({ row }) => (
-      <div className="w-[100px]">{row.getValue("dueDate")}</div>
+      <div className="w-[100px]">{format(row.getValue("dueDate"), DATE_FORMAT)}</div>
     ),
+    filterFn: (row, id, value) => {
+      console.log(dayjs(row.getValue("dueDate")))
+      return dayjs(row.getValue("dueDate")).isBetween(dayjs(value.from), dayjs(value.to), 'day', '[]')
+    }
     // enableSorting: false,
     // enableHiding: false,
   },

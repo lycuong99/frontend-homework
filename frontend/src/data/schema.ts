@@ -15,13 +15,13 @@ const invoiceLineItemSchema = z.object({
 });
 
 const customerSchema = z.object({
-  id: z.number().optional(),
+  id: z.string().optional(),
   name: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
   zip: z.string().optional(),
-  email: z.string().optional(),
+  email: z.string().email().optional(),
   phone: z.string().optional(),
 });
 
@@ -32,18 +32,20 @@ const invoiceNoteSchema = z.object({
 });
 
 const invoiceSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   status: invoiceStatusSchema,
-  amount: z.number(),
+  amount: z.number().optional(),
   createDate: z.union([z.date(), z.string()]),
   dueDate: z.union([z.date(), z.string()]),
   customer: customerSchema,
   items: z.array(invoiceLineItemSchema).optional(),
   tax: z.coerce.number().nonnegative().optional(),
   notes: z.string().optional(),
-  bankAccount: z.string().optional(),
-  bankName: z.string().optional(),
+  bankAccount: z.string(),
+  bankName: z.string(),
+  accountName: z.string(),
   messages: z.array(invoiceNoteSchema).optional(),
+  isSentMail: z.coerce.boolean().optional()
 });
 
 export { invoiceSchema, invoiceStatusSchema, invoiceLineItemSchema, customerSchema, invoiceNoteSchema };

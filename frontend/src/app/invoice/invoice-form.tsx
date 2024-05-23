@@ -18,11 +18,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { invoiceSchema } from "@/data/schema";
 import { formatCurrency } from "@/utils/number-format";
-import { Dot } from "lucide-react";
+import { Dot, MailCheck, MailIcon, MailPlus } from "lucide-react";
+import { toast } from "sonner";
 
 const sample: Partial<Invoice> = {
   status: "draft",
-  dueDate: new Date(),
+  
 };
 
 export function InvoiceForm({
@@ -53,10 +54,22 @@ export function InvoiceForm({
 
   const subtotal = getSubtotal(results ?? []);
   const total = getTotal(subtotal, tax ?? 0);
+  const isSentMail = useWatch({ control: form.control, name: "isSentMail" });
+  const email = useWatch({ control: form.control, name: "customer.email" });
+
+  const canSendMail = !isSentMail && !!email && form.formState.isValid;
+  form.register("isSentMail");
+
+  function handleSendMail() {
+    form.setValue("isSentMail", true);
+    toast("Mail has been sent.");
+  }
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, (e) => {
+          console.log("Error", e);
+        })}
         className="flex flex-col gap-6"
       >
         <Card>
@@ -86,18 +99,28 @@ export function InvoiceForm({
               <Textfield
                 name="customer.email"
                 label="Email"
-                type="email"
+                // type="email"
                 placeholder="abc@example.com"
               />
             </div>
 
             <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield
+              {/* <Textfield
                 name="id"
                 label="Invoice Number"
                 placeholder="Invoice Number"
-              />
+              /> */}
 
+              <DatePicker
+                name="createDate"
+                label="Invoice Date"
+                placeholder="Pick a date"
+              />
+              <DatePicker
+                name="dueDate"
+                label="Due Date"
+                placeholder="Pick a date"
+              />
               <Selectfield
                 name="status"
                 label="Status"
@@ -113,17 +136,6 @@ export function InvoiceForm({
                   </SelectItem>
                 ))}
               </Selectfield>
-
-              <DatePicker
-                name="createDate"
-                label="Invoice Date"
-                placeholder="Pick a date"
-              />
-              <DatePicker
-                name="dueDate"
-                label="Due Date"
-                placeholder="Pick a date"
-              />
             </div>
 
             <div className="w-full">
@@ -134,24 +146,9 @@ export function InvoiceForm({
 
         <InvoiceItemTable />
         <Separator />
+
         <div className="flex justify-between">
-          <div>
-            <h2 className="text-lg font-semibold">Payment</h2>
-            <div className="flex-1 grid grid-cols-2 gap-4">
-              <Textfield
-                className="flex-1"
-                name="bankName"
-                label="Bank Name"
-                placeholder="ex. BIDV Bank"
-              />
-              <Textfield
-                className="flex-1"
-                name="banAccount"
-                label="Bank Abount"
-                placeholder="10102012121212"
-              />
-            </div>
-          </div>
+          <Payment />
 
           <div className="flex flex-col gap-2 w-[400px]">
             <div className="flex justify-between gap-12">
@@ -179,10 +176,52 @@ export function InvoiceForm({
             <Link href="/invoice">Cancel</Link>
           </Button>
           <Button type="submit" className="w-full">
-            Save & Send
+            Save
+          </Button>
+          <Button
+            type="button"
+            className="w-full bg-blue-600 hover:bg-blue-700"
+            variant={"default"}
+            disabled={!canSendMail}
+            onClick={handleSendMail}
+          >
+            {isSentMail ? (
+              <MailCheck className="h-5 w-5 mr-2 " />
+            ) : (
+              <MailIcon className="h-5 w-5 mr-2 " />
+            )}
+            Send
           </Button>
         </div>
       </form>
     </Form>
   );
 }
+
+const Payment = () => {
+  return (
+    <div>
+      <h2 className="text-lg font-semibold mb-3">Payment</h2>
+      <div className="flex-1 grid grid-cols-2 gap-4">
+        <Textfield
+          className="flex-1"
+          name="bankName"
+          label="Bank Name"
+          placeholder="ex. BIDV Bank"
+        />
+        <Textfield
+          className="flex-1"
+          name="bankAccount"
+          label="Bank Abount"
+          placeholder="ex. 123456789"
+        />
+         <Textfield
+          className="flex-1"
+          name="accountName"
+          label="Abount Name"
+          placeholder="ex. John Dow"
+        />
+      </div>
+    </div>
+  );
+};

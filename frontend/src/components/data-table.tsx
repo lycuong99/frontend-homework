@@ -5,6 +5,7 @@ import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
+  Table as ReactTable,
   VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -26,23 +27,24 @@ import {
 } from "@/components/ui/table"
 
 import { DataTablePagination } from "./data-table-pagination"
-import { DataTableToolbar } from "./data-table-toolbar"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  toolbar( table: ReactTable<TData> ): React.ReactNode
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  toolbar
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const [sorting, setSorting] = React.useState<SortingState>([])
 
   const table = useReactTable({
@@ -54,6 +56,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
+    enableGlobalFilter: true,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -65,11 +68,16 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-  })
+    
+  });
+
 
   return (
     <div className="space-y-4 w-full">
-      <DataTableToolbar table={table} />
+     
+      {
+        toolbar?.(table)
+      }
       <div className="rounded-md border">
         <Table>
           <TableHeader>
