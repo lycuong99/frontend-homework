@@ -104,8 +104,10 @@ export function InvoiceForm({
                   value={customerId}
                   onChange={(newValue) => {
                     setCustomerId(newValue);
-                    const customer = customers.find((c) => (c.id = customerId));
-                    form.setValue("customer", { ...customer });
+                    const customer = customers.find((c) => (c.id == newValue));
+                    form.setValue("customer", { ...customer }, {
+                      shouldTouch:true
+                    });
                   }}
                   placeholder="customer"
                 />
