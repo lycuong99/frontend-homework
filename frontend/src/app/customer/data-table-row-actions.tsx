@@ -65,9 +65,9 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem asChild>
             <Link href={`/customer/edit/${item.id}`}>Edit</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          {/* <DropdownMenuItem asChild>
             <Link href={`/customer/${item.id}`}>View</Link>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem onClick={() => setOpen(true)}>
             Delete
           </DropdownMenuItem>
