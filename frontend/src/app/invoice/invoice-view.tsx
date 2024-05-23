@@ -41,14 +41,14 @@ const sample = {
       id: 123,
       name: "p1",
       quantity: 10,
-      unitPrice: "pieces",
+      rate: "pieces",
       price: 10,
     },
     {
       id: 123,
       name: "p1",
       quantity: 10,
-      unitPrice: "pieces",
+      rate: "pieces",
       price: 20,
     },
   ],
@@ -92,7 +92,7 @@ export function InvoiceView({ id }: { id: string }) {
             <TableHead>#</TableHead>
             <TableHead className="w-[320px]">Item Name</TableHead>
             <TableHead className="w-[120px]">Quantity</TableHead>
-            <TableHead className="w-[220px]">Unit Price</TableHead>
+            <TableHead className="w-[220px]">Rate</TableHead>
             <TableHead className="text-right">Price</TableHead>
             <TableHead className="text-right" align="right">
               Amount
@@ -105,7 +105,7 @@ export function InvoiceView({ id }: { id: string }) {
               <TableCell>{index + 1}</TableCell>
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.quantity}</TableCell>
-              <TableCell>{item.unitPrice}</TableCell>
+              <TableCell>{item.rate}</TableCell>
               <TableCell className="text-right">
                 {formatCurrency(item.price)}
               </TableCell>

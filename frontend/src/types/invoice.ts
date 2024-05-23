@@ -19,7 +19,7 @@ export type InvoiceLineItem = {
   name: string;
   amount?: number;
   quantity: number;
-  unitPrice: string;
+  rate: string;
   price: number;
 };
 
