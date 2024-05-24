@@ -82,17 +82,17 @@ export function InvoiceForm({
     });
   }, [customers]);
 
-  const [customerId, setCustomerId] = useState(form.getValues("customer.id"));
-  useEffect(() => {
-    const customer = customers.find((c) => c.id == customerId);
-    form.setValue(
-      "customer",
-      { ...customer },
-      {
-        shouldTouch: true,
-      }
-    );
-  }, [customerId, form, customers]);
+  // const [customerId, setCustomerId] = useState(form.getValues("customer.id"));
+  // useEffect(() => {
+  //   const customer = customers.find((c) => c.id == customerId);
+  //   form.setValue(
+  //     "customer",
+  //     { ...customer },
+  //     {
+  //       shouldTouch: true,
+  //     }
+  //   );
+  // }, [customerId, form, customers]);
 
   return (
     <Form {...form}>
@@ -114,23 +114,29 @@ export function InvoiceForm({
                   name="customer.id"
                   render={({ field }) => {
                     return (
-                      <Combobox
-                        className="space-y-2"
-                        options={customerOptions}
-                        value={field.value}
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                          const customer = customers.find((c) => c.id == newValue);
-                          form.resetField("customer", {
-                            defaultValue: { ...sample.customer },
-                          });
+                      <>
+                        <Combobox
+                          className="space-y-2"
+                          options={customerOptions}
+                          value={field.value}
+                          onChange={(newValue) => {
+                            field.onChange(newValue);
+                            const customer = customers.find((c) => c.id == newValue);
+                            form.resetField("customer", {
+                              defaultValue: { ...sample.customer },
+                            });
 
-                          form.setValue("customer", customer || {}, {
-                            shouldTouch: true,
-                          });
-                        }}
-                        placeholder="Select customer"
-                      />
+                            form.setValue(
+                              "customer",
+                              { ...customer },
+                              {
+                                shouldTouch: true,
+                              }
+                            );
+                          }}
+                          placeholder="Select customer"
+                        />
+                      </>
                     );
                   }}
                 />
