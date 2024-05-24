@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormLabel } from "@/components/ui/form";
 import { Invoice } from "@/types/invoice";
-import { useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { SelectItem } from "@/components/ui/select";
 import { statuses } from "@/data/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,11 +21,17 @@ import { formatCurrency } from "@/utils/number-format";
 import { MailCheck, MailIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useStore } from "@/store";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Combobox } from "@/components/ui/combo-box";
 
 const sample: Partial<Invoice> = {
   status: "draft",
+  customer: {
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+  },
 };
 
 export function InvoiceForm({
@@ -76,8 +82,18 @@ export function InvoiceForm({
     });
   }, [customers]);
 
+  const [customerId, setCustomerId] = useState(form.getValues("customer.id"));
+  useEffect(() => {
+    const customer = customers.find((c) => c.id == customerId);
+    form.setValue(
+      "customer",
+      { ...customer },
+      {
+        shouldTouch: true,
+      }
+    );
+  }, [customerId, form, customers]);
 
-  const [customerId, setCustomerId] = useState("");
   return (
     <Form {...form}>
       <form
@@ -94,41 +110,35 @@ export function InvoiceForm({
             <div className="flex-1 grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <FormLabel>Customer</FormLabel>
-                <Combobox
-                 className="space-y-2"
-                  options={customerOptions}
-                  value={customerId}
-                  onChange={(newValue) => {
-                    setCustomerId(newValue);
-                    const customer = customers.find((c) => (c.id == newValue));
-                    form.setValue("customer", { ...customer }, {
-                      shouldTouch:true
-                    });
+                <Controller
+                  name="customer.id"
+                  render={({ field }) => {
+                    return (
+                      <Combobox
+                        className="space-y-2"
+                        options={customerOptions}
+                        value={field.value}
+                        onChange={(newValue) => {
+                          field.onChange(newValue);
+                          const customer = customers.find((c) => c.id == newValue);
+                          form.resetField("customer", {
+                            defaultValue: { ...sample.customer },
+                          });
+
+                          form.setValue("customer", customer || {}, {
+                            shouldTouch: true,
+                          });
+                        }}
+                        placeholder="Select customer"
+                      />
+                    );
                   }}
-                  placeholder="customer"
                 />
               </div>
-              {/* <Textfield
-                className="flex-1"
-                name="customer.name"
-                label="Customer Name"
-                placeholder="Jonh dow"
-                readOnly
-              /> */}
 
-              <Textfield
-                name="customer.phone"
-                label="Customer Phone"
-                placeholder="Customer Number"
-                readOnly
-              />
+              <Textfield name="customer.phone" label="Customer Phone" placeholder="Customer Number" readOnly />
 
-              <Textfield
-                name="customer.address"
-                label="Address"
-                placeholder="Address"
-                readOnly
-              />
+              <Textfield name="customer.address" label="Address" placeholder="Address" readOnly />
               <Textfield
                 name="customer.email"
                 label="Email"
@@ -139,33 +149,11 @@ export function InvoiceForm({
             </div>
 
             <div className="flex-1 grid grid-cols-2 gap-4">
-              {/* <Textfield
-                name="id"
-                label="Invoice Number"
-                placeholder="Invoice Number"
-              /> */}
-
-              <DatePicker
-                name="createDate"
-                label="Invoice Date"
-                placeholder="Pick a date"
-              />
-              <DatePicker
-                name="dueDate"
-                label="Due Date"
-                placeholder="Pick a date"
-              />
-              <Selectfield
-                name="status"
-                label="Status"
-                placeholder="Select a status"
-              >
+              <DatePicker name="createDate" label="Invoice Date" placeholder="Pick a date" />
+              <DatePicker name="dueDate" label="Due Date" placeholder="Pick a date" />
+              <Selectfield name="status" label="Status" placeholder="Select a status">
                 {statuses.map((status) => (
-                  <SelectItem
-                    key={status.value}
-                    value={status.value}
-                    className="flex"
-                  >
+                  <SelectItem key={status.value} value={status.value} className="flex">
                     <div className="flex items-center">{status.label}</div>
                   </SelectItem>
                 ))}
@@ -190,12 +178,7 @@ export function InvoiceForm({
             </div>
             <div className="flex items-center  justify-between gap-12">
               <p>Tax(%)</p>
-              <Textfield
-                className="text-right w-20"
-                name="tax"
-                placeholder="%"
-                type="number"
-              />
+              <Textfield className="text-right w-20" name="tax" placeholder="%" type="number" />
             </div>
             <div className="flex  justify-between gap-12">
               <p className="font-bold">Total</p>
@@ -218,11 +201,7 @@ export function InvoiceForm({
             disabled={!canSendMail}
             onClick={handleSendMail}
           >
-            {isSentMail ? (
-              <MailCheck className="h-5 w-5 mr-2 " />
-            ) : (
-              <MailIcon className="h-5 w-5 mr-2 " />
-            )}
+            {isSentMail ? <MailCheck className="h-5 w-5 mr-2 " /> : <MailIcon className="h-5 w-5 mr-2 " />}
             Send
           </Button>
         </div>
@@ -236,24 +215,9 @@ const Payment = () => {
     <div>
       <h2 className="text-lg font-semibold mb-3">Payment</h2>
       <div className="flex-1 grid grid-cols-2 gap-4">
-        <Textfield
-          className="flex-1"
-          name="bankName"
-          label="Bank Name"
-          placeholder="ex. BIDV Bank"
-        />
-        <Textfield
-          className="flex-1"
-          name="bankAccount"
-          label="Bank Acount"
-          placeholder="ex. 123456789"
-        />
-        <Textfield
-          className="flex-1"
-          name="accountName"
-          label="Acount Name"
-          placeholder="ex. John Dow"
-        />
+        <Textfield className="flex-1" name="bankName" label="Bank Name" placeholder="ex. BIDV Bank" />
+        <Textfield className="flex-1" name="bankAccount" label="Bank Acount" placeholder="ex. 123456789" />
+        <Textfield className="flex-1" name="accountName" label="Acount Name" placeholder="ex. John Dow" />
       </div>
     </div>
   );

@@ -1,16 +1,11 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Sheet, SheetContent, SheetFooter,
-  SheetHeader,
-  SheetTitle
-} from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-export function SheetDemo({open, onOpenChange}: {open: boolean, onOpenChange: (open: boolean) => void}) {
+export function SheetDemo({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-     
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Edit Customer</SheetTitle>
@@ -30,9 +25,9 @@ export function SheetDemo({open, onOpenChange}: {open: boolean, onOpenChange: (o
           </div>
         </div>
         <SheetFooter>
-        <Button type="submit">Save changes</Button>
+          <Button type="submit">Save changes</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  )
+  );
 }

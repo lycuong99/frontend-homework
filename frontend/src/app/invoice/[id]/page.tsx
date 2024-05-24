@@ -7,7 +7,7 @@ export default async function InvoiceViewPage({
 }) {
 
   return (
-    <main className=" contain px-16 py-10">
+    <main className="container  contain  py-10">
       {/* Welcome to Homepage {params.id} */}
       <InvoiceView id={params.id} />
     </main>

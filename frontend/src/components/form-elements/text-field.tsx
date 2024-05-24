@@ -5,11 +5,18 @@ import { useFormContext } from "react-hook-form";
 
 export interface TextfieldProps extends FormFieldProps {
   type?: "text" | "email" | "password" | "number" | "tel" | "url";
-  className?: string | undefined;
+  className?: string;
   readOnly?: boolean;
 }
 
-export function Textfield({ className, name, label, placeholder, type = "text", readOnly = false }: TextfieldProps) {
+export function Textfield({
+  className = "",
+  name,
+  label,
+  placeholder,
+  type = "text",
+  readOnly = false,
+}: Readonly<TextfieldProps>) {
   const { control } = useFormContext();
   return (
     <FormField
