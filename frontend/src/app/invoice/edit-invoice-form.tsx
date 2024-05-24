@@ -11,7 +11,6 @@ const EditInvoiceForm = ({invoiceId}: {invoiceId: string}) => {
   const { updateInvoice, getInvoice } = useStore();
   const router = useRouter()
   const handleSubmit = (data: Invoice) => {
-    console.log(data);
 
     updateInvoice(data)
     toast("Invoice has been updated.")

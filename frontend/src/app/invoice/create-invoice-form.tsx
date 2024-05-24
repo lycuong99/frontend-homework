@@ -11,7 +11,6 @@ const CreateInvoiceForm = () => {
   const router = useRouter()
 
   const handleSubmit = (data: Invoice) => {
-    console.log(data);
     addInvoice({...data, id: `FX${Math.floor(Math.random() * 1000000)}` });
     toast("Invoice has been created.")
     router.push('/invoice')

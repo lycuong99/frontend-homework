@@ -18,13 +18,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { invoiceSchema } from "@/data/schema";
 import { formatCurrency } from "@/utils/number-format";
-import { Dot, MailCheck, MailIcon, MailPlus } from "lucide-react";
+import { MailCheck, MailIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useStore } from "@/store";
 import { useMemo, useState } from "react";
 import { Combobox } from "@/components/ui/combo-box";
-import { register } from "module";
-import { Label } from "@/components/ui/label";
 
 const sample: Partial<Invoice> = {
   status: "draft",
@@ -43,7 +41,6 @@ export function InvoiceForm({
   });
 
   function onSubmit(data: Invoice) {
-    console.log(data);
     const subtotal = getSubtotal(data.items ?? []);
     const total = getTotal(subtotal, data.tax ?? 0);
     const submitData = {
@@ -79,14 +76,13 @@ export function InvoiceForm({
     });
   }, [customers]);
 
-  console.log(customerOptions);
 
   const [customerId, setCustomerId] = useState("");
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, (e) => {
-          console.log("Error", e);
+          console.log("Invalid", e);
         })}
         className="flex flex-col gap-6"
       >
@@ -249,13 +245,13 @@ const Payment = () => {
         <Textfield
           className="flex-1"
           name="bankAccount"
-          label="Bank Abount"
+          label="Bank Acount"
           placeholder="ex. 123456789"
         />
         <Textfield
           className="flex-1"
           name="accountName"
-          label="Abount Name"
+          label="Acount Name"
           placeholder="ex. John Dow"
         />
       </div>

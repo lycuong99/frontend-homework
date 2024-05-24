@@ -1,19 +1,13 @@
 "use client";
 import { StatusBadge } from "@/components/status-badge";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Card, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useStore } from "@/store";
-import { Invoice } from "@/types/invoice";
 import { formatDate } from "@/utils/date-format";
 import { formatCurrency } from "@/utils/number-format";
+import { Pen } from "lucide-react";
+import Link from "next/link";
 
 function getSubtotal(items: { quantity: number; price: number }[]) {
   return items.reduce((total, item) => total + item.quantity * item.price, 0);
@@ -69,6 +63,11 @@ export function InvoiceView({ id }: { id: string }) {
       <CardTitle className="text-2xl flex items-center gap-4">
         <span> #{invoice.id} </span>
         <StatusBadge status={invoice.status}>{invoice.status}</StatusBadge>
+        <Button variant={"ghost"} className="rounded-full" asChild>
+          <Link href={`/invoice/edit/${id}`}>
+            <Pen />
+          </Link>
+        </Button>
       </CardTitle>
 
       <div className="flex gap-8 flex-col">
@@ -79,9 +78,7 @@ export function InvoiceView({ id }: { id: string }) {
           {invoice.customer.address} <br />
         </ViewItem>
         <div className="grid grid-cols-2">
-          <ViewItem label="Date Create">
-            {formatDate(invoice.createDate)}
-          </ViewItem>
+          <ViewItem label="Date Create">{formatDate(invoice.createDate)}</ViewItem>
           <ViewItem label="Due Date">{formatDate(invoice.dueDate)}</ViewItem>
         </div>
       </div>
@@ -106,41 +103,27 @@ export function InvoiceView({ id }: { id: string }) {
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>{item.quantity}</TableCell>
               <TableCell>{item.rate}</TableCell>
-              <TableCell className="text-right">
-                {formatCurrency(item.price)}
-              </TableCell>
-              <TableCell className="text-right">
-                {formatCurrency((item?.quantity ?? 0) * (item?.price ?? 0))}
-              </TableCell>
+              <TableCell className="text-right">{formatCurrency(item.price)}</TableCell>
+              <TableCell className="text-right">{formatCurrency((item?.quantity ?? 0) * (item?.price ?? 0))}</TableCell>
             </TableRow>
           ))}
 
           <tr>
             <TableCell colSpan={4}></TableCell>
             <TableCell className="text-gray-600 text-right">Subtotal</TableCell>
-            <TableCell className="text-right">
-              {formatCurrency(subtotal)}
-            </TableCell>
+            <TableCell className="text-right">{formatCurrency(subtotal)}</TableCell>
           </tr>
 
           <tr>
             <TableCell colSpan={4}></TableCell>
-            <TableCell className="text-gray-600 text-right">
-              Tax {invoice.tax ?? "-"}%
-            </TableCell>
-            <TableCell className="text-right">
-              {formatCurrency(taxFee)}
-            </TableCell>
+            <TableCell className="text-gray-600 text-right">Tax {invoice.tax ?? "-"}%</TableCell>
+            <TableCell className="text-right">{formatCurrency(taxFee)}</TableCell>
           </tr>
 
           <tr>
             <TableCell colSpan={4}></TableCell>
-            <TableCell className="font-semibold text-lg text-right">
-              Total
-            </TableCell>
-            <TableCell className="font-semibold text-lg text-right">
-              {formatCurrency(total)}
-            </TableCell>
+            <TableCell className="font-semibold text-lg text-right">Total</TableCell>
+            <TableCell className="font-semibold text-lg text-right">{formatCurrency(total)}</TableCell>
           </tr>
         </TableBody>
       </Table>

@@ -13,6 +13,12 @@ const invoiceLineItemSchema = z.object({
   rate: z.string(),
   price: z.coerce.number().nonnegative(),
 });
+const phoneRegex = new RegExp(
+  /^(\d{10})$/
+);
+const accountRegex = new RegExp(
+  /^(\d+)$/
+);
 
 const customerSchema = z.object({
   id: z.string().optional(),
@@ -22,7 +28,7 @@ const customerSchema = z.object({
   state: z.string().optional(),
   zip: z.string().optional(),
   email: z.string().email().optional(),
-  phone: z.string().optional(),
+  phone: z.string().regex(phoneRegex, "Invalid Phone format").optional(),
 });
 
 const invoiceNoteSchema = z.object({
@@ -41,11 +47,11 @@ const invoiceSchema = z.object({
   items: z.array(invoiceLineItemSchema).optional(),
   tax: z.coerce.number().nonnegative().optional(),
   notes: z.string().optional(),
-  bankAccount: z.string(),
+  bankAccount: z.string().regex(accountRegex, "Only digits"),
   bankName: z.string(),
   accountName: z.string(),
   messages: z.array(invoiceNoteSchema).optional(),
-  isSentMail: z.coerce.boolean().optional()
+  isSentMail: z.coerce.boolean().optional(),
 });
 
 export { invoiceSchema, invoiceStatusSchema, invoiceLineItemSchema, customerSchema, invoiceNoteSchema };

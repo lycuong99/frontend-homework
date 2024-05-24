@@ -55,11 +55,9 @@ export const columns: ColumnDef<Invoice>[] = [
       <DataTableColumnHeader column={column} title="Billed to" />
     ),
     cell: ({ row }) => {
-      // const label = labels.find((label) => label.value === row.original.label);
       const customerName = row.original.customer.name;
       return (
         <div className="flex space-x-2">
-          {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
           <span className="max-w-[500px] truncate font-medium">
             {customerName}
           </span>
@@ -121,7 +119,6 @@ export const columns: ColumnDef<Invoice>[] = [
       <div className="w-[100px]">{format(row.getValue("dueDate"), DATE_FORMAT)}</div>
     ),
     filterFn: (row, id, value) => {
-      console.log(dayjs(row.getValue("dueDate")))
       return dayjs(row.getValue("dueDate")).isBetween(dayjs(value.from), dayjs(value.to), 'day', '[]')
     }
     // enableSorting: false,

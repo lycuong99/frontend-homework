@@ -1,7 +1,7 @@
 "use client";
 
 import { Customer, Invoice } from "@/types/invoice";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import jsonInvoices from "@/data/invoices.json";
 import jsonCustomers from "@/data/customers.json";
 interface StoreT {
@@ -18,24 +18,17 @@ const defaultValues: StoreT = {
 };
 
 const storeContext = createContext<StoreT>(defaultValues);
-const data: Invoice[] = jsonInvoices as Invoice[];
+const data: Invoice[] = jsonInvoices as unknown as Invoice[];
 const customersData: Customer[] = jsonCustomers as Customer[];
 const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [invoices, setInvoices] = useState<Invoice[]>(data);
   const [customers, setCustomers] = useState<Customer[]>(customersData);
 
-  return (
-    <storeContext.Provider
-      value={{
-        invoices,
-        setInvoices,
-        customers,
-        setCustomers
-      }}
-    >
-      {children}
-    </storeContext.Provider>
-  );
+  const value = useMemo(() => {
+    return { invoices, setInvoices, customers, setCustomers };
+  }, [invoices, customers]);
+
+  return <storeContext.Provider value={value}>{children}</storeContext.Provider>;
 };
 
 function useStore() {
@@ -44,7 +37,7 @@ function useStore() {
     throw new Error("useStore must be used within a StoreProvider");
   }
 
-  const { invoices, setInvoices , customers, setCustomers} = context;
+  const { invoices, setInvoices, customers, setCustomers } = context;
   const addInvoice = (invoice: Invoice) => {
     setInvoices([...invoices, invoice]);
   };
@@ -89,7 +82,6 @@ function useStore() {
     });
     setCustomers(newCustomers);
   };
-
 
   return {
     invoices,
